@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "site": "consulta-ya-515ea",
+    "public": "dist/consulta-ya-panel/browser",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
