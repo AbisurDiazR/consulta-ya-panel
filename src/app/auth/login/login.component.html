@@ -1,80 +1,148 @@
+<div class="page-bg d-flex align-items-center justify-content-center">
+  <div class="auth-card shadow-lg">
+    <div class="row g-0 h-100">
+      <!-- Left panel (visual) -->
+      <div
+        class="col-md-7 left-panel d-none d-md-flex flex-column justify-content-between text-white p-5"
+      >
+        <div class="mt-4">
+          <h1 class="brand">Consulta<span class="brand-strong">Ya</span></h1>
+          <p class="lead mb-0">
+            Conecta médicos y pacientes con confianza y rapidez.
+          </p>
+        </div>
 
-  <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
-    <div class="row w-100 justify-content-center px-3">
-      <div class="col-12 col-md-10 col-lg-8">
-        <div class="card shadow-sm overflow-hidden border-0">
-          <div class="row g-0">
-            <!-- Left: illustration / promo (hidden on small screens) -->
-            <div class="col-md-5 d-none d-md-flex align-items-center justify-content-center bg-primary text-white p-4">
-              <div class="text-center">
-                <h3 class="mb-2">Panel Administrativo</h3>
-                <p class="small mb-0">Accede con tu cuenta administrativa para gestionar validaciones y usuarios.</p>
+        <div class="decor">
+          <!-- decor circles -->
+          <svg
+            class="dec-svg"
+            viewBox="0 0 400 120"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <circle
+              cx="100"
+              cy="140"
+              r="140"
+              fill="none"
+              stroke="rgba(255,255,255,0.06)"
+              stroke-width="2"
+            />
+            <circle
+              cx="260"
+              cy="220"
+              r="220"
+              fill="none"
+              stroke="rgba(255,255,255,0.04)"
+              stroke-width="2"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Right panel (form) -->
+      <div class="col-12 col-md-5 right-panel p-5 d-flex align-items-center">
+        <div class="w-100">
+          <h4 class="mb-1">Hola de nuevo</h4>
+          <p class="text-muted mb-4">
+            Introduce tus credenciales administrativas
+          </p>
+
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+            <div class="mb-3 input-group-custom">
+              <span class="input-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 8l8 5 8-5"
+                    stroke="#B3B3B3"
+                    stroke-width="1.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+              <input
+                id="email"
+                type="email"
+                class="form-control rounded-pill form-control-lg"
+                placeholder="Correo electrónico"
+                formControlName="email"
+                [class.is-invalid]="
+                  email.invalid && (email.touched || email.dirty)
+                "
+              />
+              <div class="invalid-feedback" *ngIf="email.errors?.['required']">
+                El email es obligatorio.
+              </div>
+              <div class="invalid-feedback" *ngIf="email.errors?.['email']">
+                Introduce un email válido.
               </div>
             </div>
 
-            <!-- Right: login form -->
-            <div class="col-12 col-md-7 p-4">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <div>
-                  <h4 class="m-0">Iniciar sesión</h4>
-                  <small class="text-muted">Introduce tus credenciales</small>
-                </div>
-                <div class="d-md-none">
-                  <!-- icon only visible on mobile -->
-                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z" fill="#0d6efd"/>
-                    <path d="M4 20c0-3.31 4.03-6 8-6s8 2.69 8 6v1H4v-1z" fill="#0d6efd"/>
-                  </svg>
-                </div>
+            <div class="mb-3 input-group-custom">
+              <span class="input-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 17a2 2 0 100-4 2 2 0 000 4zM17 8V7a5 5 0 10-10 0v1"
+                    stroke="#B3B3B3"
+                    stroke-width="1.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+              <input
+                id="password"
+                type="password"
+                class="form-control rounded-pill form-control-lg"
+                placeholder="Contraseña"
+                formControlName="password"
+                [class.is-invalid]="
+                  password.invalid && (password.touched || password.dirty)
+                "
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="password.errors?.['required']"
+              >
+                La contraseña es obligatoria.
               </div>
-
-              <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-                <div class="mb-3">
-                  <label for="email" class="form-label">Correo electrónico</label>
-                  <input id="email" type="email" formControlName="email" class="form-control" [class.is-invalid]="email.invalid && (email.dirty || email.touched)" placeholder="tú@ejemplo.com" />
-                  <div class="invalid-feedback" *ngIf="email.errors?.['required']">El email es obligatorio.</div>
-                  <div class="invalid-feedback" *ngIf="email.errors?.['email']">Introduce un email válido.</div>
-                </div>
-
-                <div class="mb-3">
-                  <label for="password" class="form-label">Contraseña</label>
-                  <input id="password" type="password" formControlName="password" class="form-control" [class.is-invalid]="password.invalid && (password.dirty || password.touched)" placeholder="Contraseña" />
-                  <div class="invalid-feedback" *ngIf="password.errors?.['required']">La contraseña es obligatoria.</div>
-                  <div class="invalid-feedback" *ngIf="password.errors?.['minlength']">Mínimo 6 caracteres.</div>
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="remember" formControlName="remember">
-                    <label class="form-check-label" for="remember">Recordarme</label>
-                  </div>
-                  <a class="small" routerLink="/forgot">¿Olvidaste tu contraseña?</a>
-                </div>
-
-                <button class="btn btn-primary w-100 d-flex justify-content-center align-items-center" type="submit" [disabled]="loading || form.invalid">
-                  <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                  Ingresar
-                </button>
-
-                <div *ngIf="error" class="alert alert-danger mt-3 mb-0" role="alert">
-                  {{ error }}
-                </div>
-              </form>
-
-              <hr class="my-4">
-
-              <div class="text-center">
-                <small class="text-muted">¿Necesitas una cuenta administrativa?</small>
-                <div class="mt-2">
-                  <button class="btn btn-outline-secondary btn-sm me-2" (click)="onDemo()">Demo</button>
-                  <button class="btn btn-outline-primary btn-sm" disabled title="Pendiente integrar SSO/Google">Iniciar con Google</button>
-                </div>
+              <div
+                class="invalid-feedback"
+                *ngIf="password.errors?.['minlength']"
+              >
+                Mínimo 6 caracteres.
               </div>
+            </div>
 
-            </div> <!-- /col form -->
-          </div> <!-- /row -->
-        </div> <!-- /card -->
-      </div> <!-- /col -->
-    </div> <!-- /row -->
-  </div> <!-- /container -->
-  
+            <div class="d-grid mb-2">
+              <button
+                class="btn btn-primary btn-lg rounded-pill"
+                type="submit"
+                [disabled]="form.invalid || loading"
+              >
+                <span
+                  *ngIf="loading"
+                  class="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Ingresar
+              </button>
+            </div>
+
+            <!-- No links to register / forgot / demo - kept intentionally minimal -->
+          </form>
+
+          <div *ngIf="error" class="alert alert-danger mt-3 py-2">
+            {{ error }}
+          </div>
+
+          <div class="text-center text-muted small mt-4">
+            Panel de administración — acceso restringido.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

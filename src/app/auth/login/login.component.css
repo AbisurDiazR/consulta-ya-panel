@@ -1,12 +1,129 @@
 :host {
   display: block;
 }
-.card {
-  border-radius: 12px;
+
+/* Page background */
+.page-bg {
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    #0575e6 0%,
+    #00a8ff 100%
+  ); /* vivid blue */
+  padding: 3rem 1rem;
+}
+
+/* Card */
+.auth-card {
+  width: 95%;
+  max-width: 1200px;
+  height: 72vh;
+  border-radius: 20px;
   overflow: hidden;
+  background: transparent;
+  box-shadow: 0 30px 60px rgba(3, 26, 57, 0.35);
+  border-radius: 28px;
+}
+
+/* Left visual */
+.left-panel {
+  background: linear-gradient(180deg, #0a74d1 0%, #02143a 100%);
+  border-top-left-radius: 28px;
+  border-bottom-left-radius: 28px;
+}
+.brand {
+  font-weight: 700;
+  font-size: 2.2rem;
+  letter-spacing: 0.2px;
+  margin-bottom: 0.25rem;
+}
+.brand-strong {
+  color: #ffffff;
+  opacity: 0.95;
+}
+.left-panel .lead {
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 0.3rem;
+}
+.dec-svg {
+  width: 100%;
+  height: 100px;
+  opacity: 0.5;
+}
+
+/* Right form */
+.right-panel {
+  background: #ffffff;
+  border-top-right-radius: 28px;
+  border-bottom-right-radius: 28px;
+  min-height: 72vh;
+}
+
+h4 {
+  font-weight: 700;
+}
+.text-muted {
+  color: #7b7b7b !important;
+}
+
+/* Custom input with icon */
+.input-group-custom {
+  position: relative;
+}
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0.9;
+}
+.input-group-custom .form-control {
+  padding-left: 44px;
+  border: 1px solid #f0f0f0;
+  box-shadow: none;
+  background: #fafafa;
+}
+.form-control:focus {
+  box-shadow: none;
+  border-color: rgba(13, 110, 253, 0.35);
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+  .auth-card {
+    height: auto;
+    border-radius: 18px;
+  }
+  .left-panel {
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 0;
+    min-height: 140px;
+    padding: 2rem;
+  }
+  .right-panel {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 18px;
+    padding: 2rem;
+  }
+  .left-panel.d-none.d-md-flex {
+    display: flex !important;
+  } /* keep left visible on medium if desired */
 }
 @media (max-width: 575.98px) {
-  .card {
-    margin: 0 0.5rem;
+  .left-panel {
+    display: none !important;
+  } /* on very small screens hide heavy visual */
+  .auth-card {
+    height: auto;
+    max-width: 420px;
+  }
+  .right-panel {
+    min-height: auto;
+    border-radius: 12px;
+    padding: 1.6rem;
   }
 }
