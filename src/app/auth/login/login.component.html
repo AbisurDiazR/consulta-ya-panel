@@ -1,0 +1,80 @@
+
+  <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
+    <div class="row w-100 justify-content-center px-3">
+      <div class="col-12 col-md-10 col-lg-8">
+        <div class="card shadow-sm overflow-hidden border-0">
+          <div class="row g-0">
+            <!-- Left: illustration / promo (hidden on small screens) -->
+            <div class="col-md-5 d-none d-md-flex align-items-center justify-content-center bg-primary text-white p-4">
+              <div class="text-center">
+                <h3 class="mb-2">Panel Administrativo</h3>
+                <p class="small mb-0">Accede con tu cuenta administrativa para gestionar validaciones y usuarios.</p>
+              </div>
+            </div>
+
+            <!-- Right: login form -->
+            <div class="col-12 col-md-7 p-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <h4 class="m-0">Iniciar sesión</h4>
+                  <small class="text-muted">Introduce tus credenciales</small>
+                </div>
+                <div class="d-md-none">
+                  <!-- icon only visible on mobile -->
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z" fill="#0d6efd"/>
+                    <path d="M4 20c0-3.31 4.03-6 8-6s8 2.69 8 6v1H4v-1z" fill="#0d6efd"/>
+                  </svg>
+                </div>
+              </div>
+
+              <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+                <div class="mb-3">
+                  <label for="email" class="form-label">Correo electrónico</label>
+                  <input id="email" type="email" formControlName="email" class="form-control" [class.is-invalid]="email.invalid && (email.dirty || email.touched)" placeholder="tú@ejemplo.com" />
+                  <div class="invalid-feedback" *ngIf="email.errors?.['required']">El email es obligatorio.</div>
+                  <div class="invalid-feedback" *ngIf="email.errors?.['email']">Introduce un email válido.</div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">Contraseña</label>
+                  <input id="password" type="password" formControlName="password" class="form-control" [class.is-invalid]="password.invalid && (password.dirty || password.touched)" placeholder="Contraseña" />
+                  <div class="invalid-feedback" *ngIf="password.errors?.['required']">La contraseña es obligatoria.</div>
+                  <div class="invalid-feedback" *ngIf="password.errors?.['minlength']">Mínimo 6 caracteres.</div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="remember" formControlName="remember">
+                    <label class="form-check-label" for="remember">Recordarme</label>
+                  </div>
+                  <a class="small" routerLink="/forgot">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <button class="btn btn-primary w-100 d-flex justify-content-center align-items-center" type="submit" [disabled]="loading || form.invalid">
+                  <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  Ingresar
+                </button>
+
+                <div *ngIf="error" class="alert alert-danger mt-3 mb-0" role="alert">
+                  {{ error }}
+                </div>
+              </form>
+
+              <hr class="my-4">
+
+              <div class="text-center">
+                <small class="text-muted">¿Necesitas una cuenta administrativa?</small>
+                <div class="mt-2">
+                  <button class="btn btn-outline-secondary btn-sm me-2" (click)="onDemo()">Demo</button>
+                  <button class="btn btn-outline-primary btn-sm" disabled title="Pendiente integrar SSO/Google">Iniciar con Google</button>
+                </div>
+              </div>
+
+            </div> <!-- /col form -->
+          </div> <!-- /row -->
+        </div> <!-- /card -->
+      </div> <!-- /col -->
+    </div> <!-- /row -->
+  </div> <!-- /container -->
+  
