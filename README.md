@@ -28,3 +28,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Ejecutar el deploy en firebase hosting
 firebase deploy --only hosting:consulta-ya-515ea
+
+## Instalar dependencias 
+npm install --legacy-peer-deps

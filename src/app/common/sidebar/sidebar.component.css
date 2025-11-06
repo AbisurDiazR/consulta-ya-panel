@@ -1,0 +1,49 @@
+:host { display: block; }
+
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  transition: width 0.22s ease, transform 0.28s ease;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+
+.sidebar.collapsed { width: 72px; }
+
+.brand-strong { color: #fff; opacity: 0.95; }
+
+.sidebar-top { min-height: 64px; }
+
+.nav-link {
+  color: rgba(255,255,255,0.95);
+  transition: background-color .15s ease;
+}
+.nav-link.active, .nav-link:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+.collapse-sub { display: none; }
+.collapse-sub.show { display: block; }
+
+.sidebar-footer {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.7);
+}
+
+/* Responsive - collapse on small screens (hidden by default) */
+@media (max-width: 991.98px) {
+  .sidebar {
+    position: fixed;
+    z-index: 1045;
+    transform: translateX(0);
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: #0b5ed7;
+    box-shadow: 0 8px 30px rgba(2,6,23,0.45);
+  }
+  .sidebar.collapsed {
+    transform: translateX(-110%);
+  }
+}

@@ -1,0 +1,93 @@
+<aside
+  class="sidebar d-flex flex-column bg-primary text-white"
+  [class.collapsed]="!open"
+>
+  <div
+    class="sidebar-top d-flex align-items-center justify-content-between px-3 py-3 border-bottom"
+  >
+    <div class="brand">
+      <span class="fw-bold">Consulta<span class="brand-strong">Ya</span></span>
+    </div>
+    <button
+      class="btn btn-sm btn-outline-light d-lg-none"
+      (click)="requestClose()"
+    >
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
+  <nav class="flex-grow-1 overflow-auto px-2 py-3">
+    <ul class="nav flex-column">
+      <li class="nav-item mb-1">
+        <a
+          routerLink="/dashboard/home"
+          routerLinkActive="active"
+          class="nav-link text-white px-3 py-2 rounded"
+          (click)="requestClose()"
+        >
+          <i class="bi bi-house me-2"></i> Inicio
+        </a>
+      </li>
+
+      <li class="nav-item mb-1">
+        <a
+          class="nav-link text-white px-3 py-2 rounded d-flex justify-content-between align-items-center"
+          (click)="toggleUsers()"
+        >
+          <div><i class="bi bi-person-badge me-2"></i> Usuarios</div>
+          <i
+            [ngClass]="usersOpen ? 'bi-caret-down-fill' : 'bi-caret-right-fill'"
+          ></i>
+        </a>
+
+        <ul
+          class="nav flex-column ms-3 mt-2 collapse-sub"
+          [class.show]="usersOpen"
+        >
+          <li class="nav-item mb-1">
+            <a
+              routerLink="/dashboard/medicos"
+              routerLinkActive="active"
+              class="nav-link text-white px-3 py-2 rounded"
+              (click)="requestClose()"
+              >Médicos</a
+            >
+          </li>
+          <li class="nav-item mb-1">
+            <a
+              routerLink="/dashboard/pacientes"
+              routerLinkActive="active"
+              class="nav-link text-white px-3 py-2 rounded"
+              (click)="requestClose()"
+              >Pacientes</a
+            >
+          </li>
+          <li class="nav-item mb-1">
+            <a
+              routerLink="/dashboard/usuarios"
+              routerLinkActive="active"
+              class="nav-link text-white px-3 py-2 rounded"
+              (click)="requestClose()"
+              >Administradores</a
+            >
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-item mt-auto mb-2">
+        <a
+          routerLink="/dashboard/ajustes"
+          routerLinkActive="active"
+          class="nav-link text-white px-3 py-2 rounded"
+          (click)="requestClose()"
+        >
+          <i class="bi bi-gear me-2"></i> Ajustes
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="sidebar-footer px-3 py-3 border-top">
+    <div class="small text-white-50">v1.0 • Panel privado</div>
+  </div>
+</aside>

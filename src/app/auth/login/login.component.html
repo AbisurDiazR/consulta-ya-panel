@@ -67,14 +67,11 @@
                 class="form-control rounded-pill form-control-lg"
                 placeholder="Correo electrónico"
                 formControlName="email"
-                [class.is-invalid]="
-                  email.invalid && (email.touched || email.dirty)
-                "
               />
-              <div class="invalid-feedback" *ngIf="email.errors?.['required']">
+              <div class="invalid-feedback" *ngIf="form.get('email')?.errors?.['required']">
                 El email es obligatorio.
               </div>
-              <div class="invalid-feedback" *ngIf="email.errors?.['email']">
+              <div class="invalid-feedback" *ngIf="form.get('email')?.errors?.['email']">
                 Introduce un email válido.
               </div>
             </div>
@@ -97,19 +94,16 @@
                 class="form-control rounded-pill form-control-lg"
                 placeholder="Contraseña"
                 formControlName="password"
-                [class.is-invalid]="
-                  password.invalid && (password.touched || password.dirty)
-                "
               />
               <div
                 class="invalid-feedback"
-                *ngIf="password.errors?.['required']"
+                *ngIf="form.get('password')?.errors?.['required']"
               >
                 La contraseña es obligatoria.
               </div>
               <div
                 class="invalid-feedback"
-                *ngIf="password.errors?.['minlength']"
+                *ngIf="form.get('password')?.errors?.['minlength']"
               >
                 Mínimo 6 caracteres.
               </div>

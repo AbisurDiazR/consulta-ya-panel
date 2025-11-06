@@ -1,0 +1,30 @@
+:host { display: block; height: 100vh; }
+
+.dashboard-root { min-height: 100vh; background: #f6f7fb; }
+
+.content-area {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Topbar */
+.topbar {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Avatar small */
+.avatar i { font-size: 1.05rem; }
+
+/* main content scroll */
+main {
+  background: transparent;
+}
+
+/* small screens adjustments */
+@media (max-width: 768px) {
+  main { padding: 1rem; }
+}
