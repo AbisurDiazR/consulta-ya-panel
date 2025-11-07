@@ -1,27 +1,53 @@
-// src/app/services/auth.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, from } from 'rxjs';
 
 // Firebase SDK (puro)
 import { User, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { auth, db } from '../app.config'; // AJUSTA RUTA según tu proyecto
 import { doc, getDoc } from 'firebase/firestore';
 
-// Ajusta la ruta al archivo donde exportaste `auth` y `db`
-// ejemplo: export const auth = getAuth(app); export const db = getFirestore(app);
-import { auth, db } from '../app.config'; // <-- AJUSTA ESTA RUTA
+// Importa RoleService para obtener role (si ya lo tienes)
+// Si no lo tienes, puedes eliminar el import y usar getDoc directo en isAdmin/getRole
+import { RoleService } from './role.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+  // Estado del usuario autenticado (igual que antes)
   private user$ = new BehaviorSubject<User | null>(null);
   readonly currentUser$ = this.user$.asObservable();
 
-  constructor() {
+  /**
+   * Estado del rol:
+   *  - undefined => aún no se intentó cargar el rol (no cargado)
+   *  - null => consultado y NO existe doc en /admins (no admin)
+   *  - string => rol cargado (ej. 'admin', 'superadmin')
+   */
+  private role$ = new BehaviorSubject<string | null | undefined>(undefined);
+  readonly currentRole$ = this.role$.asObservable();
+
+  constructor(private roleService: RoleService) {
     // Escuchar cambios de estado de autenticación
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       this.user$.next(user);
+
+      if (!user) {
+        // limpiar cache si cierra sesión
+        this.role$.next(undefined);
+        return;
+      }
+
+      // al iniciar sesión intentamos cargar rol (no bloqueante para UI)
+      try {
+        const r = await this.roleService.getUserRole(user);
+        // si no hay documento, getUserRole devuelve null
+        this.role$.next(r ?? null);
+      } catch (err) {
+        console.error('Error cargando role en onAuthStateChanged:', err);
+        this.role$.next(null);
+      }
     });
   }
 
@@ -31,10 +57,16 @@ export class AuthService {
   }
 
   logout() {
+    // limpiamos cache local al cerrar sesión
+    this.role$.next(undefined);
+    this.user$.next(null);
     return from(signOut(auth));
   }
 
-  // Verifica si existe un documento en /admins con id = user.uid
+  /**
+   * Comprueba existencia del documento admins/{uid}
+   * (compatible con tu implementación previa)
+   */
   async isAdmin(user: User | null): Promise<boolean> {
     if (!user) return false;
     try {
@@ -44,6 +76,27 @@ export class AuthService {
     } catch (err) {
       console.error('Error verificando admin:', err);
       return false;
+    }
+  }
+
+  /**
+   * Fuerza recarga del rol desde Firestore y actualiza cache.
+   * Devuelve el rol (string) o null si no existe.
+   */
+  async refreshRole(): Promise<string | null> {
+    const user = this.user$.value;
+    if (!user) {
+      this.role$.next(undefined);
+      return null;
+    }
+    try {
+      const role = await this.roleService.getUserRole(user);
+      this.role$.next(role ?? null);
+      return role ?? null;
+    } catch (err) {
+      console.error('refreshRole error:', err);
+      this.role$.next(null);
+      return null;
     }
   }
 }
