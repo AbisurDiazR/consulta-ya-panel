@@ -40,10 +40,18 @@ export class AuthService {
       }
 
       // al iniciar sesión intentamos cargar rol (no bloqueante para UI)
+      // Nota: El rol puede ser null incluso si el usuario está en admins (si no tiene campo role)
       try {
-        const r = await this.roleService.getUserRole(user);
-        // si no hay documento, getUserRole devuelve null
-        this.role$.next(r ?? null);
+        const isAdmin = await this.isAdmin(user);
+        if (isAdmin) {
+          // Solo intentar obtener el rol si el usuario está en admins
+          const r = await this.roleService.getUserRole(user);
+          // r puede ser null si no tiene campo role, eso es válido
+          this.role$.next(r ?? null);
+        } else {
+          // Usuario no está en admins
+          this.role$.next(null);
+        }
       } catch (err) {
         console.error('Error cargando role en onAuthStateChanged:', err);
         this.role$.next(null);
@@ -64,17 +72,20 @@ export class AuthService {
   }
 
   /**
-   * Comprueba existencia del documento admins/{uid}
-   * (compatible con tu implementación previa)
+   * Comprueba si el usuario existe en la colección "admins" de Firestore
+   * Retorna true solo si existe un documento en admins/{uid}
    */
   async isAdmin(user: User | null): Promise<boolean> {
-    if (!user) return false;
+    if (!user) {
+      return false;
+    }
+    
     try {
       const ref = doc(db, 'admins', user.uid);
       const snapshot = await getDoc(ref);
       return snapshot.exists();
     } catch (err) {
-      console.error('Error verificando admin:', err);
+      console.error('Error verificando existencia en colección "admins":', err);
       return false;
     }
   }
