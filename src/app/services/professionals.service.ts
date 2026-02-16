@@ -1,5 +1,15 @@
 import { Injectable } from '@angular/core';
-import { collection, getDocs, doc, getDoc, updateDoc, query, orderBy } from 'firebase/firestore';
+import {
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  updateDoc,
+  addDoc,
+  query,
+  orderBy,
+  serverTimestamp
+} from 'firebase/firestore';
 import { db } from '../app.config';
 
 export interface Professional {
@@ -11,11 +21,11 @@ export interface Professional {
   phone?: string;
   specialty?: string;
   licenseNumber?: string;
-  status?: 'pending' | 'approved' | 'rejected' | string; // Estado del profesional
+  status?: 'pending' | 'approved' | 'rejected' | string;
   createdAt?: any;
   updatedAt?: any;
-  location?: any; // Se añadirá en el futuro desde otro frontend
-  [key: string]: any; // Para campos adicionales que puedan existir
+  location?: any;
+  [key: string]: any;
 }
 
 @Injectable({
@@ -23,7 +33,7 @@ export interface Professional {
 })
 export class ProfessionalsService {
 
-  constructor() { }
+  constructor() {}
 
   /**
    * Obtiene todos los profesionales de la colección "professionals"
@@ -77,8 +87,7 @@ export class ProfessionalsService {
   }
 
   /**
-   * Activa o desactiva un profesional
-   * Cambia el status entre 'active' e 'inactive'
+   * Activa o desactiva un profesional (cambia status entre 'approved' y 'rejected')
    */
   async toggleProfessionalStatus(id: string, status: 'approved' | 'rejected'): Promise<void> {
     try {
@@ -96,17 +105,100 @@ export class ProfessionalsService {
   }
 
   /**
-   * Activa un profesional (cambia status a 'active')
+   * Activa un profesional (status 'approved')
    */
   async activateProfessional(id: string): Promise<void> {
     return this.toggleProfessionalStatus(id, 'approved');
   }
 
   /**
-   * Desactiva un profesional (cambia status a 'inactive')
+   * Desactiva un profesional (status 'rejected')
    */
   async deactivateProfessional(id: string): Promise<void> {
     return this.toggleProfessionalStatus(id, 'rejected');
+  }
+
+  /**
+   * Crea un nuevo profesional en la colección "professionals"
+   */
+  async createProfessional(data: Omit<Professional, 'id' | 'createdAt' | 'updatedAt'> & { uid?: string }): Promise<string> {
+    try {
+      const professionalsRef = collection(db, 'professionals');
+      const docRef = await addDoc(professionalsRef, {
+        ...data,
+        createdAt: serverTimestamp(),
+        updatedAt: new Date().toISOString()
+      });
+      console.log(`[ProfessionalsService] ✅ Profesional creado con ID: ${docRef.id}`);
+      return docRef.id;
+    } catch (error) {
+      console.error('[ProfessionalsService] ❌ Error creando profesional:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Registra profesionales de ejemplo en la colección "professionals"
+   */
+  async seedExampleProfessionals(): Promise<number> {
+    const examples: Omit<Professional, 'id' | 'createdAt' | 'updatedAt'>[] = [
+      {
+        firstName: 'María',
+        lastName: 'García López',
+        email: 'maria.garcia@ejemplo.com',
+        phone: '5551234567',
+        specialty: 'Medicina General',
+        licenseNumber: 'MG-001234',
+        status: 'pending'
+      },
+      {
+        firstName: 'Carlos',
+        lastName: 'Rodríguez Sánchez',
+        email: 'carlos.rodriguez@ejemplo.com',
+        phone: '5552345678',
+        specialty: 'Cardiología',
+        licenseNumber: 'CAR-005678',
+        status: 'approved'
+      },
+      {
+        firstName: 'Ana',
+        lastName: 'Martínez Fernández',
+        email: 'ana.martinez@ejemplo.com',
+        phone: '5553456789',
+        specialty: 'Pediatría',
+        licenseNumber: 'PED-009012',
+        status: 'pending'
+      },
+      {
+        firstName: 'Luis',
+        lastName: 'Hernández Torres',
+        email: 'luis.hernandez@ejemplo.com',
+        phone: '5554567890',
+        specialty: 'Dermatología',
+        licenseNumber: 'DER-012345',
+        status: 'rejected'
+      },
+      {
+        firstName: 'Laura',
+        lastName: 'Pérez Ruiz',
+        email: 'laura.perez@ejemplo.com',
+        phone: '5555678901',
+        specialty: 'Psicología',
+        licenseNumber: 'PSI-015678',
+        status: 'approved'
+      }
+    ];
+
+    let created = 0;
+    for (const item of examples) {
+      try {
+        await this.createProfessional(item);
+        created++;
+      } catch (err) {
+        console.warn('[ProfessionalsService] No se pudo crear un profesional de ejemplo:', err);
+      }
+    }
+    return created;
   }
 
   /**
